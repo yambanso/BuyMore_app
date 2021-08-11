@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    app:startDestination="@id/menuhome">
+
+    <fragment
+        android:id="@+id/menuhome"
+        android:name="com.example.buymore_app.screen_fragment.homeFragment"
+        android:label="Home"
+        tools:layout="@layout/fragment_home" />
+    <fragment
+        android:id="@+id/menuFavourites"
+        android:name="com.example.buymore_app.screen_fragment.favouritesFragment"
+        android:label="Favourites"
+        tools:layout="@layout/fragment_favourites" />
+    <fragment
+        android:id="@+id/menuCart"
+        android:name="com.example.buymore_app.screen_fragment.addCartFragment"
+        android:label="Cart"
+        tools:layout="@layout/fragment_add_cart" />
+    <fragment
+        android:id="@+id/addItem"
+        android:name="com.example.buymore_app.add_item"
+        android:label="Add Item"
+        tools:layout="@layout/fragment_add_item" />
+    <fragment
+        android:id="@+id/myItems"
+        android:name="com.example.buymore_app.my_items"
+        android:label="My Items"
+        tools:layout="@layout/fragment_my_items" />
+</navigation>
