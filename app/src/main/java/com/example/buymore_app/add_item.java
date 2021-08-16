@@ -12,6 +12,7 @@ import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Spinner;
@@ -77,10 +78,11 @@ public class add_item extends Fragment {
     Button cancel,submit;
 
     Uri filepath;
-    Bitmap bitmap;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         // Inflate the layout for this fragment
         View  view = inflater.inflate(R.layout.fragment_add_item, container, false);
         imageup = view.findViewById(R.id.itemPicture);
@@ -91,6 +93,11 @@ public class add_item extends Fragment {
         descriprition = view.findViewById(R.id.description);
         cancel = view.findViewById(R.id.cancel);
         submit = view.findViewById(R.id.submit);
+
+        //populating the spinner
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(), R.array.category_array,android.R.layout.simple_dropdown_item_1line);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        category.setAdapter(adapter);
 
         imageup.setOnClickListener(new View.OnClickListener() {
             @Override

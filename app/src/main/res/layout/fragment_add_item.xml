@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/black"
+    android:background="@color/white"
     tools:context=".add_item">
 
     <!-- TODO: Update blank fragment layout -->
@@ -74,11 +74,10 @@
             <Spinner
                 android:id="@+id/category"
                 android:layout_width="343dp"
-                android:background="@color/white"
                 android:layout_height="59dp"
                 android:layout_gravity="center"
                 android:layout_marginTop="10dp"
-                android:spinnerMode="dropdown"
+                android:background="@color/black"
                 android:prompt="@string/spinnerprompt"
                />
 
@@ -87,11 +86,10 @@
                 android:id="@+id/qtyLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-
                 android:layout_marginLeft="32dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginRight="32dp"
-                android:hint="Enter item quantity"
+                android:hint="@string/enter_item_quantity"
                 >
 
                 <com.google.android.material.textfield.TextInputEditText

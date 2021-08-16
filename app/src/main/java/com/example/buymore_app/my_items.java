@@ -3,10 +3,22 @@ package com.example.buymore_app;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.example.buymore_app.Adapter.ItemsAdapter;
+
+import static com.example.buymore_app.R.drawable.acer_nitro_5;
+import static com.example.buymore_app.R.drawable.buren_83016m;
+import static com.example.buymore_app.R.drawable.dell_xps_13;
+import static com.example.buymore_app.R.drawable.huawei_mate_20;
+import static com.example.buymore_app.R.drawable.lg_v60;
+import static com.example.buymore_app.R.drawable.nike_air_270;
+import static com.example.buymore_app.R.drawable.polo_golf_shirt;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -54,11 +66,26 @@ public class my_items extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
-
+    RecyclerView recyclerView;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_my_items, container, false);
+
+        View view = inflater.inflate(R.layout.fragment_my_items, container, false);
+
+        recyclerView =view.findViewById(R.id.recycleView);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        Items[] ItemsList = new Items[]{
+                new Items( 0,  100, nike_air_270, "Nike air Max 270 Black", "Fashion", "k40,000"),
+                new Items(1,  36, acer_nitro_5, "Acer Nitro 5", "Laptop", "k700,000"),
+                new Items(2,  7, dell_xps_13, "Dell Xps 13", "Laptop", "k550,000"),
+                new Items(3,  100, polo_golf_shirt, "Polo Mens Golf Shirt", "Fashion", "k50,000"),
+        };
+
+        recyclerView.setAdapter(new ItemsAdapter(ItemsList, getContext()));
+        return view;
     }
 }

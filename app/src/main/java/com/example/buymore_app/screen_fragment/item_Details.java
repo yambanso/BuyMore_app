@@ -69,7 +69,7 @@ public class item_Details extends Fragment {
     ImageView itemImage;
     TextView itemName, price, quantity, category, details;
     Button enq, add_Cart;
-    ImageButton addFavourites;
+    ImageView addFavourites;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -122,10 +122,12 @@ public class item_Details extends Fragment {
             @Override
             public void onClick(View v) {
                 if(fav[0] == false) {
-                    addFavourites.setBackgroundColor(android.R.color.holo_red_light);
                     fav[0] = true;
+                    addFavourites.setImageResource(R.drawable.ic_favorite);
                     Toast.makeText(getContext(),itemm.getItemName()+" added to favourites", Toast.LENGTH_SHORT).show();
                 }else {
+                    fav[0] = false;
+                    addFavourites.setImageResource(R.drawable.ic_baseline_favorite_red);
                     Toast.makeText(getContext(),itemm.getItemName()+" removed from favourites", Toast.LENGTH_SHORT).show();
                 }
 

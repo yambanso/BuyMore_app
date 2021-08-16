@@ -3,12 +3,29 @@ package com.example.buymore_app.screen_fragment;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
+import com.example.buymore_app.Adapter.ItemsAdapter;
+import com.example.buymore_app.Adapter.cartAdapter;
+import com.example.buymore_app.Items;
 import com.example.buymore_app.R;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static com.example.buymore_app.R.drawable.acer_nitro_5;
+import static com.example.buymore_app.R.drawable.buren_83016m;
+import static com.example.buymore_app.R.drawable.dell_xps_13;
+import static com.example.buymore_app.R.drawable.huawei_mate_20;
+import static com.example.buymore_app.R.drawable.lg_v60;
+import static com.example.buymore_app.R.drawable.nike_air_270;
+import static com.example.buymore_app.R.drawable.polo_golf_shirt;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -61,6 +78,23 @@ public class addCartFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_add_cart, container, false);
+        RecyclerView recyclerView;
+        TextView price;
+
+        View view = inflater.inflate(R.layout.fragment_add_cart, container, false);
+        price = view.findViewById(R.id.totalPrice);
+        recyclerView = view.findViewById(R.id.cartItems);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        List<Items> ItemsList = new ArrayList<Items>();
+                ItemsList.add(new Items(0,  10, huawei_mate_20, "Huawei mate 20 pro", "phones", "k400,000"));
+                ItemsList.add(new Items(1,  100, nike_air_270, "Nike air Max 270 Black", "Fashion", "k40,000"));
+                ItemsList.add(new Items(2,  87, lg_v60, "LG V60 thinkQ", "Phones", "k480,000"));
+                ItemsList.add(new Items(3,  100, polo_golf_shirt, "Polo Mens Golf Shirt", "Fashion", "k50,000"));
+
+        price.setText("Total : k "+970000);
+        recyclerView.setAdapter(new cartAdapter(ItemsList, getContext()));
+        return view;
     }
 }

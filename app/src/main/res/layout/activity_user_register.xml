@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/white"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".userRegister">
@@ -23,6 +24,7 @@
         android:layout_width="match_parent"
         android:hint="@string/prompt_mail"
         android:layout_height="wrap_content"
+        android:background="@color/white"
         android:layout_marginTop="32dp"
         android:layout_marginLeft="32dp"
         android:layout_marginRight="32dp"
@@ -36,7 +38,7 @@
             android:id="@+id/email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:drawableEnd="@drawable/ic_mail" />
+            android:drawableEnd="@drawable/ic_phone" />
     </com.google.android.material.textfield.TextInputLayout>
 
     //address
@@ -48,6 +50,7 @@
         android:layout_marginTop="32dp"
         android:layout_marginLeft="32dp"
         android:layout_marginRight="32dp"
+        android:background="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintTop_toBottomOf="@id/mailLayout"
@@ -65,6 +68,7 @@
         android:id="@+id/textInputLayout0"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/white"
         android:layout_marginLeft="32dp"
         android:layout_marginTop="40dp"
         android:layout_marginRight="32dp"
@@ -92,6 +96,7 @@
         android:layout_marginTop="40dp"
         android:layout_marginRight="32dp"
         android:hint="@string/cornfirm_password"
+        android:background="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -122,6 +127,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
+        android:textColor="@color/black"
         android:text="@string/have_account"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
