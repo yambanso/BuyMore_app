@@ -10,7 +10,6 @@
         android:id="@+id/linearLayout"
         android:layout_width="411dp"
         android:layout_height="63dp"
-
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -21,7 +20,7 @@
             android:layout_width="30dp"
             android:layout_marginStart="10dp"
             android:layout_height="match_parent"
-            android:src="@drawable/icback" />
+            android:src="@drawable/ic_back24" />
 
         <TextView
             android:id="@+id/Head"

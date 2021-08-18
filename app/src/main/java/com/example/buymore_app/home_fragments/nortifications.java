@@ -2,7 +2,9 @@ package com.example.buymore_app.home_fragments;
 
 import android.os.Bundle;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -69,7 +71,8 @@ public class nortifications extends Fragment {
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                FragmentManager fragmentManager = getFragmentManager();
+                fragmentManager.popBackStack();
             }
         });
         return view;

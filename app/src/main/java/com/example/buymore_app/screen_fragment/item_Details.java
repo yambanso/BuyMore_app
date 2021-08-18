@@ -1,6 +1,11 @@
 package com.example.buymore_app.screen_fragment;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageInstaller;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -19,6 +24,9 @@ import com.example.buymore_app.Items;
 import com.example.buymore_app.R;
 
 import org.jetbrains.annotations.TestOnly;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -113,7 +121,19 @@ public class item_Details extends Fragment {
         enq.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getContext(),"Sending an enquiry", Toast.LENGTH_SHORT).show();
+                String contact = "265999127521";
+                String message = "I would like to enquire about item : " +itemm.getItemName()+" listed on the buy more app for sale";
+                Intent intent = new Intent(Intent.ACTION_SEND);
+                intent.setType("text/plain");
+                intent.putExtra(Intent.EXTRA_TEXT,message);
+                intent.putExtra("jid",contact + "@s.whatsapp.net");
+                intent.setPackage("com.whatsapp");
+                if(intent.resolveActivity(getActivity().getPackageManager()) == null){
+                    Toast.makeText(getContext(),"Failled to send enquiry message", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                startActivity(intent);
+
             }
         });
         final Boolean[] fav = {false};
