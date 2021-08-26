@@ -10,6 +10,9 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.buymore_app.backend.appDatabase;
+import com.example.buymore_app.backend.userDao;
+import com.example.buymore_app.backend.userEntity;
 import com.google.android.material.textfield.TextInputEditText;
 
 public class userRegister extends AppCompatActivity {
@@ -23,7 +26,7 @@ public class userRegister extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_register);
 
-        Txtmail = findViewById(R.id.email);
+        Txtmail = findViewById(R.id.email);//now phoneNumber
         Txtaddress = findViewById(R.id.location);
         TxtPassword = findViewById(R.id.Userpassword);
         conPassword = findViewById(R.id.pwordCornfirm);
@@ -47,15 +50,51 @@ public class userRegister extends AppCompatActivity {
                 //checking if password is equal to cornfirm password
                 if(!(ConPassword.equals(password))){
                     Toast.makeText(getApplicationContext(),"Please make sure that Password and Password Cornfirm are equal", Toast.LENGTH_SHORT).show();
-                }else{
-
+                }else {
                     progBar.setVisibility(View.VISIBLE);
-                    Intent intent = new Intent(getApplicationContext(),login.class);
-                    startActivity(intent);
-                    finish();
 
+                    //creating user entity
+                    userEntity userentity = new userEntity();
+                    userentity.setPhoneNumber(mail);
+                    userentity.setAddress(address);
+                    userentity.setPassword(password);
+
+                    //do an insert operation
+                    appDatabase db = appDatabase.getBuymoreDatabase(getApplicationContext());
+                    userDao dao = db.UserDao();
+                                        // a new thread to insert data into our database
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                userEntity entity = dao.phoneCheck(mail);
+                                if (entity != null) {
+                                    runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            Toast.makeText(getApplicationContext(), "Phone number already registered try another one", Toast.LENGTH_SHORT).show();
+                                            progBar.setVisibility(View.INVISIBLE);
+                                        }
+                                    });
+                                    } else {
+                                    //inserting user
+                                    dao.userRegister(userentity);
+                                    //going to user login page
+                                    runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            //confirming user registration and going to log in activity
+                                            Toast.makeText(getApplicationContext(), "user Registered succesifully", Toast.LENGTH_SHORT).show();
+                                            Intent intent = new Intent(getApplicationContext(), login.class);
+                                            startActivity(intent);
+                                            finish();
+                                        }
+                                    });
+                                }
+                            }
+                        }).start();
+
+                    }
                 }
-            }
 
         });
 
