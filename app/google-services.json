@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "839460716819",
+    "project_id": "buy-more-b8791",
+    "storage_bucket": "buy-more-b8791.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:839460716819:android:d8c20ab7c1bdb2f920dae6",
+        "android_client_info": {
+          "package_name": "com.example.buymore_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "839460716819-2padj6vo633693r8lvqui3uis0gkrdj0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDpSQSbUr1TFSAG6htmASCF-65uDlYNEJc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "839460716819-2padj6vo633693r8lvqui3uis0gkrdj0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

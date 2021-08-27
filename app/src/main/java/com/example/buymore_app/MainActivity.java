@@ -12,8 +12,12 @@ import androidx.navigation.NavDestination;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -21,19 +25,23 @@ import android.widget.TextView;
 
 import com.example.buymore_app.home_fragments.nortifications;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.FirebaseAuth;
 
 import org.jetbrains.annotations.NotNull;
 
 public class MainActivity extends AppCompatActivity {
 
-    private AlertDialog.Builder dialogBuilder;
-    private AlertDialog dialog;
+
     private ImageView imageButton;
+    MenuItem signout;
+    private FirebaseAuth mAuth;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        mAuth = FirebaseAuth.getInstance();
         DrawerLayout drawerlayout = findViewById(R.id.drawerlayout);
+        signout = findViewById(R.id.menuSignOut);
 
         //opens navigation
         findViewById(R.id.menuImage).setOnClickListener(new View.OnClickListener() {
@@ -71,6 +79,22 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        Menu menu = navigationView.getMenu();
+        MenuItem item = menu.findItem(R.id.menuSignOut);
+        item.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                log_out();
+                return true;
+            }
+        });
+
+
+
+        }
+    public void log_out() {
+        FirebaseAuth.getInstance().signOut();
+        startActivity(new Intent(MainActivity.this, login.class));
     }
     }
 
