@@ -97,9 +97,8 @@ public class userRegister extends AppCompatActivity {
                                             @Override
                                             public void onComplete(@NonNull @NotNull Task<Void> task) {
                                                 if(task.isSuccessful()) {
-                                                    progBar.setVisibility(View.GONE);
                                                     Toast.makeText(userRegister.this, "user Has been registered", Toast.LENGTH_LONG).show();
-
+                                                    progBar.setVisibility(View.GONE);
                                                     Intent intent = new Intent(getApplicationContext(), login.class);
                                                     startActivity(intent);
                                                     finish();

@@ -86,14 +86,18 @@ public class addCartFragment extends Fragment {
         recyclerView = view.findViewById(R.id.cartItems);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-
+        String desc = getResources().getString(R.string.description);
         List<Items> ItemsList = new ArrayList<Items>();
-                ItemsList.add(new Items(0,  10, huawei_mate_20, "Huawei mate 20 pro", "phones", "k400,000"));
-                ItemsList.add(new Items(1,  100, nike_air_270, "Nike air Max 270 Black", "Fashion", "k40,000"));
-                ItemsList.add(new Items(2,  87, lg_v60, "LG V60 thinkQ", "Phones", "k480,000"));
-                ItemsList.add(new Items(3,  100, polo_golf_shirt, "Polo Mens Golf Shirt", "Fashion", "k50,000"));
+                ItemsList.add(new Items(0+"",  10, huawei_mate_20, "Huawei mate 20 pro", "phones", 400000,desc));
+                ItemsList.add(new Items(1+"",  100, nike_air_270, "Nike air Max 270 Black", "Fashion", 40000, desc));
+                ItemsList.add(new Items(2+"",  87, lg_v60, "LG V60 thinkQ", "Phones", 480000, desc));
+                ItemsList.add(new Items(3+"",  100, polo_golf_shirt, "Polo Mens Golf Shirt", "Fashion", 50000,desc));
 
-        price.setText("Total : k "+970000);
+                int total = 0;
+                for(int i = 0;i <ItemsList.size();i++){
+                    total += ItemsList.get(i).getPrice();
+                }
+        price.setText("Total : k "+ total);
         recyclerView.setAdapter(new cartAdapter(ItemsList, getContext()));
         return view;
     }

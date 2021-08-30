@@ -8,20 +8,12 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:461528563957:android:7e0d7055cad19529f445bc",
+        "mobilesdk_app_id": "1:461528563957:android:6962e8170b7e073ef445bc",
         "android_client_info": {
           "package_name": "com.example.buymore_app"
         }
       },
       "oauth_client": [
-        {
-          "client_id": "461528563957-eaihkcvcndjbk9guvuuc8nrvolo7dm55.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.example.buymore_app",
-            "certificate_hash": "c85e9cf43d8fb4e67148ee5efff17c396e2f1f4b"
-          }
-        },
         {
           "client_id": "461528563957-9v1bis10bkbu88hkprdp8oliiophur04.apps.googleusercontent.com",
           "client_type": 3

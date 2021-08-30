@@ -74,14 +74,14 @@ public class fashion extends Fragment {
         recyclerView = view .findViewById(R.id.recycleView);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-
+            String desc = getResources().getString(R.string.description);
         Items[] fashionItems = new Items[]{
-                new Items(0,  100, buren_83016m, "Buren 83016M", "Fashion", "k100,000"),
-                new Items(1,  120, polo_golf_shirt, "Polo Mens Golf Shirt", "Fashion", "k50,000"),
-                new Items(2,  16, nike_air_270, "Nike air Max 270 Black", "Fashion", "k40,000"),
-                new Items(3,  2450, R.drawable.new_balance_tshirt, "New Balance T shirt", "Fashion", "k17,000"),
-                new Items(4,  100, R.drawable.zara_mens_pants, "Zara mens Pants", "Fashion", "k20,000"),
-                new Items(5,  100, R.drawable.new_balance_sweatshirt, "Adidas sweat Shirt", "Fashion", "k20,000"),
+                new Items(0+"",  100, buren_83016m, "Buren 83016M", "Fashion", 100000,"it has 128gb 6gb ram has a fingerprint selfie kamera etc"),
+                new Items(1+"",  120, polo_golf_shirt, "Polo Mens Golf Shirt", "Fashion",40000, desc),
+                new Items(2+"",  16, nike_air_270, "Nike air Max 270 Black", "Fashion", 40000,desc),
+                new Items(3+"",  2450, R.drawable.new_balance_tshirt, "New Balance T shirt", "Fashion", 17000, desc),
+                new Items(4+"",  100, R.drawable.zara_mens_pants, "Zara mens Pants", "Fashion", 20000, desc),
+                new Items(5+"",  100, R.drawable.new_balance_sweatshirt, "Adidas sweat Shirt", "Fashion", 20000, desc),
         };
         recyclerView.setAdapter(new ItemsAdapter(fashionItems, getContext()));
         return view;

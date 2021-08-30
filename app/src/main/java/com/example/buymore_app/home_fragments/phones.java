@@ -73,14 +73,14 @@ public class phones extends Fragment {
         recyclerView =view.findViewById(R.id.recycleView);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-
+        String desc = getResources().getString(R.string.description);
         Items[] ItemsList = new Items[]{
-                new Items (0,  10, huawei_mate_20, "Huawei mate 20 pro", "phones", "k400,000"),
-                new Items(1,  87, lg_v60, "LG V60 thinkQ", "Phones", "k480,000"),
-                new Items(2,  50, R.drawable.samsung_s21, "Samasung s21", "Phones", "k800, 000"),
-                new Items(3,  13, R.drawable.nokia, "Nokia 8.3 5G", "Phones", "k500,000"),
-                new Items(4,  87, R.drawable.one_plus_8pro, "One plus pro", "Phones", "k350,000"),
-                new Items(5,  12, R.drawable.iphone_12, "Iphone 12 normal", "Phones", "k1,200 000"),
+                new Items (0+"",  10, huawei_mate_20, "Huawei mate 20 pro", "phones", 400000, desc),
+                new Items(1+"",  87, lg_v60, "LG V60 thinkQ", "Phones", 480000, desc),
+                new Items(2+"",  50, R.drawable.samsung_s21, "Samasung s21", "Phones", 800000,desc),
+                new Items(3+"",  13, R.drawable.nokia, "Nokia 8.3 5G", "Phones", 500000, desc),
+                new Items(4+"",  87, R.drawable.one_plus_8pro, "One plus pro", "Phones", 350000,desc),
+                new Items(5+"",  12, R.drawable.iphone_12, "Iphone 12 normal", "Phones", 1200000,desc),
                };
 
         recyclerView.setAdapter(new ItemsAdapter(ItemsList, getContext()));

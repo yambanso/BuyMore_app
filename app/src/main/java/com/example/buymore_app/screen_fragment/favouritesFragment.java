@@ -74,12 +74,12 @@ public class favouritesFragment extends Fragment {
         recyclerView =view.findViewById(R.id.recycleView);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-
+        String desc = getResources().getString(R.string.description);
         Items[] ItemsList = new Items[]{
-                new Items (0,  10, huawei_mate_20, "Huawei mate 20 pro", "phones", "k400,000"),
-                new Items(1,  78, R.drawable.razer_blade, "Razer Blade pro", "Laptop", "k1,700 000"),
-                new Items(2,  12, R.drawable.iphone_12, "Iphone 12 normal", "Phones", "k1,200 000"),
-                new Items(3,  16, nike_air_270, "Nike air Max 270 Black", "Fashion", "k40,000"),
+                new Items (0+"",  10, huawei_mate_20, "Huawei mate 20 pro", "phones", 400000,desc),
+                new Items(1+"",  78, R.drawable.razer_blade, "Razer Blade pro", "Laptop", 1700000, desc),
+                new Items(2+"",  12, R.drawable.iphone_12, "Iphone 12 normal", "Phones", 1200000,desc),
+                new Items(3+"",  16, nike_air_270, "Nike air Max 270 Black", "Fashion", 40000,desc),
                };
 
         recyclerView.setAdapter(new ItemsAdapter(ItemsList, getContext()));

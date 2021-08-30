@@ -70,14 +70,14 @@ public class laptops extends Fragment {
         recyclerView = view .findViewById(R.id.recycleView);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-
+        String desc = getResources().getString(R.string.description);
         Items[] fashionItems = new Items[]{
-                new Items(0,  36, R.drawable.acer_nitro_5, "Acer Nitro 5", "Laptop", "k700,000"),
-                new Items(1,  7, R.drawable.dell_xps_13, "Dell Xps 13", "Laptop", "k550,000"),
-                new Items(2,  16, R.drawable.asus_vivobook, "Asus Vivo Book", "Laptop", "k400,000"),
-                new Items(3,  240, R.drawable.hp_g6, "Hp G6", "Laptop", "k370,000"),
-                new Items(4,  100, R.drawable.macbook_pro, "Macbook Pro", "Laptop", "k2,000 000"),
-                new Items(5,  78, R.drawable.razer_blade, "Razer Blade pro", "Laptop", "k1,700 000"),
+                new Items(0+"",  36, R.drawable.acer_nitro_5, "Acer Nitro 5", "Laptop", 700000, desc),
+                new Items(1+"",  7, R.drawable.dell_xps_13, "Dell Xps 13", "Laptop", 550000, desc),
+                new Items(2+"",  16, R.drawable.asus_vivobook, "Asus Vivo Book", "Laptop", 400000, desc),
+                new Items(3+"",  240, R.drawable.hp_g6, "Hp G6", "Laptop", 370000, desc),
+                new Items(4+"",  100, R.drawable.macbook_pro, "Macbook Pro", "Laptop", 2000000, desc),
+                new Items(5+"",  78, R.drawable.razer_blade, "Razer Blade pro", "Laptop", 1700000,desc),
         };
         recyclerView.setAdapter(new ItemsAdapter(fashionItems, getContext()));
         return view;}

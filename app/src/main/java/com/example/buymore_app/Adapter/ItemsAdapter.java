@@ -46,7 +46,7 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.itemsViewHol
     public void onBindViewHolder(@NonNull @NotNull itemsViewHolder holder, int position) {
         Items item = ItemsList[position];
         holder.itemName.setText(item.getItemName());
-        holder.price.setText(item.getPrice());
+        holder.price.setText("k "+item.getPrice());
         holder.image.setImageResource(item.getImageUrl());
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {

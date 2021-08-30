@@ -77,12 +77,12 @@ public class my_items extends Fragment {
         recyclerView =view.findViewById(R.id.recycleView);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-
+        String desc = getResources().getString(R.string.description);
         Items[] ItemsList = new Items[]{
-                new Items( 0,  100, nike_air_270, "Nike air Max 270 Black", "Fashion", "k40,000"),
-                new Items(1,  36, acer_nitro_5, "Acer Nitro 5", "Laptop", "k700,000"),
-                new Items(2,  7, dell_xps_13, "Dell Xps 13", "Laptop", "k550,000"),
-                new Items(3,  100, polo_golf_shirt, "Polo Mens Golf Shirt", "Fashion", "k50,000"),
+                new Items( 0+"",  100, nike_air_270, "Nike air Max 270 Black", "Fashion", 40000, desc),
+                new Items(1+"",  36, acer_nitro_5, "Acer Nitro 5", "Laptop", 700000, desc),
+                new Items(2+"",  7, dell_xps_13, "Dell Xps 13", "Laptop", 550000,desc),
+                new Items(3+"",  100, polo_golf_shirt, "Polo Mens Golf Shirt", "Fashion", 50000, desc),
         };
 
         recyclerView.setAdapter(new ItemsAdapter(ItemsList, getContext()));
