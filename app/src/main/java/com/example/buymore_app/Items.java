@@ -1,5 +1,7 @@
 package com.example.buymore_app;
 
+import android.net.Uri;
+
 public class Items {
 
     private String ownerId;
@@ -11,15 +13,6 @@ public class Items {
     private String description;
     private String  uri;
 
-    public Items(String ownerId, int quantity, int imageUrl, String itemName, String category, int price, String description) {
-        this.ownerId = ownerId;
-        this.quantity = quantity;
-        this.imageUrl = imageUrl;
-        this.itemName = itemName;
-        Category = category;
-        this.price = price;
-        this.description = description;
-    }
 
     public Items() {
     }
@@ -34,8 +27,8 @@ public class Items {
         this.description = description;
     }
 
-    public String getUri() {
-        return uri;
+    public Uri getUri() {
+        return Uri.parse(uri);
     }
 
     public void setUri(String uri) {

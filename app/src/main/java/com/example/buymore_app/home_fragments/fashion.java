@@ -2,6 +2,7 @@ package com.example.buymore_app.home_fragments;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -13,6 +14,16 @@ import android.view.ViewGroup;
 import com.example.buymore_app.Adapter.ItemsAdapter;
 import com.example.buymore_app.Items;
 import com.example.buymore_app.R;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import org.jetbrains.annotations.NotNull;
+
+import java.util.ArrayList;
+import java.util.Collections;
 
 import static com.example.buymore_app.R.drawable.buren_83016m;
 import static com.example.buymore_app.R.drawable.nike_air_270;
@@ -75,15 +86,26 @@ public class fashion extends Fragment {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
             String desc = getResources().getString(R.string.description);
-        Items[] fashionItems = new Items[]{
-                new Items(0+"",  100, buren_83016m, "Buren 83016M", "Fashion", 100000,"it has 128gb 6gb ram has a fingerprint selfie kamera etc"),
-                new Items(1+"",  120, polo_golf_shirt, "Polo Mens Golf Shirt", "Fashion",40000, desc),
-                new Items(2+"",  16, nike_air_270, "Nike air Max 270 Black", "Fashion", 40000,desc),
-                new Items(3+"",  2450, R.drawable.new_balance_tshirt, "New Balance T shirt", "Fashion", 17000, desc),
-                new Items(4+"",  100, R.drawable.zara_mens_pants, "Zara mens Pants", "Fashion", 20000, desc),
-                new Items(5+"",  100, R.drawable.new_balance_sweatshirt, "Adidas sweat Shirt", "Fashion", 20000, desc),
-        };
-        recyclerView.setAdapter(new ItemsAdapter(fashionItems, getContext()));
+        ArrayList<Items> fashionItems = new ArrayList<>();
+        ItemsAdapter adapter = new ItemsAdapter(fashionItems, getContext());
+        DatabaseReference db = FirebaseDatabase.getInstance().getReference("Item");
+        recyclerView.setAdapter(adapter);
+        db.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                for(DataSnapshot dataSnapshot : snapshot.getChildren()){
+                    Items item = dataSnapshot.getValue(Items.class);
+                    if(item.getCategory().equals( "Fashion"))fashionItems.add(item);
+                }
+                Collections.reverse(fashionItems);
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(@NonNull @NotNull DatabaseError error) {
+
+            }
+        });
         return view;
     }
 }

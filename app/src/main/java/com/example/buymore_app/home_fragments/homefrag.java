@@ -2,6 +2,7 @@ package com.example.buymore_app.home_fragments;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -15,8 +16,16 @@ import com.example.buymore_app.Adapter.ItemsAdapter;
 import com.example.buymore_app.Items;
 import com.example.buymore_app.MainActivity;
 import com.example.buymore_app.R;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import static com.example.buymore_app.R.drawable.acer_nitro_5;
@@ -33,7 +42,7 @@ public class homefrag extends Fragment {
         // Required empty public constructor
     }
 
-
+        DatabaseReference db;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,17 +56,32 @@ public class homefrag extends Fragment {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         String desc = getResources().getString(R.string.description);
-        Items[] ItemsList = new Items[]{
-                new Items (0+"",  10, huawei_mate_20, "Huawei mate 20 pro", "phones", 400000, desc),
-                new Items(1+"",  100, nike_air_270, "Nike air Max 270 Black", "Fashion", 40000, desc),
-                new Items(2+"",  36, acer_nitro_5, "Acer Nitro 5", "Laptop", 700000, desc),
-                new Items(3+"",  7, dell_xps_13, "Dell Xps 13", "Laptop", 550000, desc),
-                new Items(4+"",  100, buren_83016m, "Buren 83016M", "Fashion", 100000, desc),
-                new Items(5+"",  87, lg_v60, "LG V60 thinkQ", "Phones", 480000, desc),
-                new Items(6+"",  100, polo_golf_shirt, "Polo Mens Golf Shirt", "Fashion", 50000, desc),
-        };
 
-        recyclerView.setAdapter(new ItemsAdapter(ItemsList, getContext()));
+        db = FirebaseDatabase.getInstance().getReference("Item");
+        ArrayList<Items> list = new ArrayList<>();
+        ItemsAdapter adapter = new ItemsAdapter(list, getContext());
+        recyclerView.setAdapter(adapter);
+        db.addValueEventListener(new ValueEventListener() {
+
+            @Override
+            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                for(DataSnapshot dataSnapshot : snapshot.getChildren()){
+                     Items item = dataSnapshot.getValue(Items.class);
+                     list.add(item);
+                }
+                Collections.reverse(list);
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(@NonNull @NotNull DatabaseError error) {
+
+            }
+        });
+
+
         return view;
+
+
     }
 }

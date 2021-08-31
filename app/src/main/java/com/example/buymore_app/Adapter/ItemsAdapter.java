@@ -2,6 +2,8 @@ package com.example.buymore_app.Adapter;
 
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,18 +19,21 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.buymore_app.Items;
 import com.example.buymore_app.R;
 import com.example.buymore_app.screen_fragment.item_Details;
+import com.squareup.picasso.Picasso;
 
 import org.jetbrains.annotations.NotNull;
+
+import java.util.ArrayList;
 
 
 public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.itemsViewHolder> {
 
 
 
-    Items[] ItemsList;
+    ArrayList<Items> ItemsList;
     Context context;
 
-    public ItemsAdapter(Items [] ItemsList, Context context){
+    public ItemsAdapter(ArrayList<Items> ItemsList, Context context){
         this.ItemsList = ItemsList;
         this.context = context;
 
@@ -44,10 +49,10 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.itemsViewHol
 
     @Override
     public void onBindViewHolder(@NonNull @NotNull itemsViewHolder holder, int position) {
-        Items item = ItemsList[position];
+        Items item = ItemsList.get(position);
         holder.itemName.setText(item.getItemName());
         holder.price.setText("k "+item.getPrice());
-        holder.image.setImageResource(item.getImageUrl());
+        Picasso.get().load(item.getUri()).into(holder.image);
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -74,7 +79,7 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.itemsViewHol
 
     @Override
     public int getItemCount() {
-        return ItemsList.length;
+        return ItemsList.size();
     }
 
 

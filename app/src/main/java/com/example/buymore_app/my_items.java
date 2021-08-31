@@ -2,6 +2,7 @@ package com.example.buymore_app;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -11,6 +12,18 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.buymore_app.Adapter.ItemsAdapter;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import org.jetbrains.annotations.NotNull;
+
+import java.util.ArrayList;
+import java.util.Collections;
 
 import static com.example.buymore_app.R.drawable.acer_nitro_5;
 import static com.example.buymore_app.R.drawable.buren_83016m;
@@ -67,6 +80,7 @@ public class my_items extends Fragment {
         }
     }
     RecyclerView recyclerView;
+    String id;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -77,15 +91,31 @@ public class my_items extends Fragment {
         recyclerView =view.findViewById(R.id.recycleView);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        String desc = getResources().getString(R.string.description);
-        Items[] ItemsList = new Items[]{
-                new Items( 0+"",  100, nike_air_270, "Nike air Max 270 Black", "Fashion", 40000, desc),
-                new Items(1+"",  36, acer_nitro_5, "Acer Nitro 5", "Laptop", 700000, desc),
-                new Items(2+"",  7, dell_xps_13, "Dell Xps 13", "Laptop", 550000,desc),
-                new Items(3+"",  100, polo_golf_shirt, "Polo Mens Golf Shirt", "Fashion", 50000, desc),
-        };
+        ArrayList<Items> ItemsList = new ArrayList<>();
+        DatabaseReference db = FirebaseDatabase.getInstance().getReference("Item");
 
-        recyclerView.setAdapter(new ItemsAdapter(ItemsList, getContext()));
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        id = user.getUid();
+
+        ItemsAdapter  adapter = new ItemsAdapter(ItemsList, getContext());
+        recyclerView.setAdapter(adapter);
+
+        db.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                for(DataSnapshot dataSnapshot : snapshot.getChildren()){
+                    Items item = dataSnapshot.getValue(Items.class);
+                    if(item.getOwnerId().equals(id)) ItemsList.add(item);
+                }
+                Collections.reverse(ItemsList);
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(@NonNull @NotNull DatabaseError error) {
+
+            }
+        });
         return view;
     }
 }

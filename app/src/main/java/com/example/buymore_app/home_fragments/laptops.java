@@ -2,6 +2,7 @@ package com.example.buymore_app.home_fragments;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -13,6 +14,16 @@ import android.view.ViewGroup;
 import com.example.buymore_app.Adapter.ItemsAdapter;
 import com.example.buymore_app.Items;
 import com.example.buymore_app.R;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import org.jetbrains.annotations.NotNull;
+
+import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -61,7 +72,7 @@ public class laptops extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
-
+    DatabaseReference db;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -70,15 +81,27 @@ public class laptops extends Fragment {
         recyclerView = view .findViewById(R.id.recycleView);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        String desc = getResources().getString(R.string.description);
-        Items[] fashionItems = new Items[]{
-                new Items(0+"",  36, R.drawable.acer_nitro_5, "Acer Nitro 5", "Laptop", 700000, desc),
-                new Items(1+"",  7, R.drawable.dell_xps_13, "Dell Xps 13", "Laptop", 550000, desc),
-                new Items(2+"",  16, R.drawable.asus_vivobook, "Asus Vivo Book", "Laptop", 400000, desc),
-                new Items(3+"",  240, R.drawable.hp_g6, "Hp G6", "Laptop", 370000, desc),
-                new Items(4+"",  100, R.drawable.macbook_pro, "Macbook Pro", "Laptop", 2000000, desc),
-                new Items(5+"",  78, R.drawable.razer_blade, "Razer Blade pro", "Laptop", 1700000,desc),
-        };
-        recyclerView.setAdapter(new ItemsAdapter(fashionItems, getContext()));
+        db = FirebaseDatabase.getInstance().getReference("Item");
+        ArrayList<Items> list = new ArrayList<>();
+        ItemsAdapter adapter = new ItemsAdapter(list, getContext());
+        db.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                for(DataSnapshot dataSnapshot : snapshot.getChildren()){
+                    Items item = dataSnapshot.getValue(Items.class);
+                    if(item.getCategory().equals("Laptop"))list.add(item);
+
+                }
+                Collections.reverse(list);
+                adapter.notifyDataSetChanged();
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull @NotNull DatabaseError error) {
+
+            }
+        });
+        recyclerView.setAdapter(adapter);
         return view;}
 }

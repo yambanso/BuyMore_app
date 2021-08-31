@@ -9,6 +9,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import android.provider.MediaStore;
 import android.view.LayoutInflater;
@@ -22,6 +23,7 @@ import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.example.buymore_app.home_fragments.homefrag;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.textfield.TextInputEditText;
@@ -192,9 +194,12 @@ public class add_item extends Fragment {
 
                                 Items item = new Items(ownerID,uri.toString(),qty,name, catego, price,descript);
                                 String itemID  = dbRef.push().getKey();
+                                System.out.println(itemID);
                                 dbRef.child(itemID).setValue(item);
+
                                 Toast.makeText(getContext(),"Item upload succesiful",Toast.LENGTH_LONG).show();
-                            }
+                                prg.setVisibility(View.INVISIBLE);
+                                                            }
                         });
                 }
             }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
@@ -209,6 +214,8 @@ public class add_item extends Fragment {
                     Toast.makeText(getContext(),"Failled to upload item",Toast.LENGTH_LONG).show();
                 }
             });
+
+
     }
     private String getFileExtension(Uri uri){
         ContentResolver cr = getContext().getContentResolver();

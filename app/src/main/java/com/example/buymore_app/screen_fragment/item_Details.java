@@ -22,6 +22,7 @@ import android.widget.Toast;
 import com.example.buymore_app.Adapter.Utility;
 import com.example.buymore_app.Items;
 import com.example.buymore_app.R;
+import com.squareup.picasso.Picasso;
 
 import org.jetbrains.annotations.TestOnly;
 
@@ -101,14 +102,12 @@ public class item_Details extends Fragment {
         Items itemm = Utility.getGsonParser().fromJson(item, Items.class);
 
 
-        itemImage.setImageResource(itemm.getImageUrl());
+        Picasso.get().load(itemm.getUri()).into(itemImage);
         itemName.setText(itemm.getItemName());
         price.setText("Price : "+itemm.getPrice());
         category.setText("Categoy : "+ itemm.getCategory());
         quantity.setText("In Stock : "+ itemm.getQuantity());
-        details.setText("Limit of Liability/Disclaimer of Warranty: The publisher and the author make no representations or warranties with respect to the accuracy or completeness of the contents of this work and specifically disclaim\n" +
-                "all warranties, including without limitation warranties of fitness for a particular purpose. No warranty\n" +
-                "may be created or extended by sales or promotional materials.");
+        details.setText(itemm.getDescription());
 
         //action listeners for buttons
         add_Cart.setOnClickListener(new View.OnClickListener() {

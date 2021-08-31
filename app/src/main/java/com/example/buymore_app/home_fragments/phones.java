@@ -2,6 +2,7 @@ package com.example.buymore_app.home_fragments;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -13,6 +14,16 @@ import android.view.ViewGroup;
 import com.example.buymore_app.Adapter.ItemsAdapter;
 import com.example.buymore_app.Items;
 import com.example.buymore_app.R;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import org.jetbrains.annotations.NotNull;
+
+import java.util.ArrayList;
+import java.util.Collections;
 
 import static com.example.buymore_app.R.drawable.huawei_mate_20;
 import static com.example.buymore_app.R.drawable.lg_v60;
@@ -73,16 +84,28 @@ public class phones extends Fragment {
         recyclerView =view.findViewById(R.id.recycleView);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        String desc = getResources().getString(R.string.description);
-        Items[] ItemsList = new Items[]{
-                new Items (0+"",  10, huawei_mate_20, "Huawei mate 20 pro", "phones", 400000, desc),
-                new Items(1+"",  87, lg_v60, "LG V60 thinkQ", "Phones", 480000, desc),
-                new Items(2+"",  50, R.drawable.samsung_s21, "Samasung s21", "Phones", 800000,desc),
-                new Items(3+"",  13, R.drawable.nokia, "Nokia 8.3 5G", "Phones", 500000, desc),
-                new Items(4+"",  87, R.drawable.one_plus_8pro, "One plus pro", "Phones", 350000,desc),
-                new Items(5+"",  12, R.drawable.iphone_12, "Iphone 12 normal", "Phones", 1200000,desc),
-               };
 
-        recyclerView.setAdapter(new ItemsAdapter(ItemsList, getContext()));
+        DatabaseReference db = FirebaseDatabase.getInstance().getReference("Item");
+        ArrayList<Items> ItemsList = new ArrayList<>();
+        ItemsAdapter adapter = new ItemsAdapter(ItemsList, getContext());
+
+        recyclerView.setAdapter(adapter);
+
+        db.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                for(DataSnapshot dataSnapshot : snapshot.getChildren()){
+                    Items item = dataSnapshot.getValue(Items.class);
+                    if(item.getCategory().equals( "Phones"))ItemsList.add(item);
+                }
+                Collections.reverse(ItemsList);
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(@NonNull @NotNull DatabaseError error) {
+
+            }
+        });
         return view;}
 }
