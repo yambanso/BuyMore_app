@@ -22,6 +22,11 @@ import android.widget.Toast;
 import com.example.buymore_app.Adapter.Utility;
 import com.example.buymore_app.Items;
 import com.example.buymore_app.R;
+import com.example.buymore_app.backend.favouriteItem;
+import com.example.buymore_app.backend.favouritesDatabase;
+import com.example.buymore_app.backend.itemDao;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.squareup.picasso.Picasso;
 
 import org.jetbrains.annotations.TestOnly;
@@ -79,6 +84,7 @@ public class item_Details extends Fragment {
     TextView itemName, price, quantity, category, details;
     Button enq, add_Cart;
     ImageView addFavourites;
+    Items itemm;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -99,9 +105,9 @@ public class item_Details extends Fragment {
         String item = bundle.getString("Item");
 
         //converting the string item back to an item object
-        Items itemm = Utility.getGsonParser().fromJson(item, Items.class);
+        itemm = Utility.getGsonParser().fromJson(item, Items.class);
 
-
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         Picasso.get().load(itemm.getUri()).into(itemImage);
         itemName.setText(itemm.getItemName());
         price.setText("Price : "+itemm.getPrice());
@@ -135,21 +141,48 @@ public class item_Details extends Fragment {
 
             }
         });
-        final Boolean[] fav = {false};
+
         addFavourites.setOnClickListener(new View.OnClickListener() {
             @SuppressLint("ResourceAsColor")
             @Override
             public void onClick(View v) {
-                if(fav[0] == false) {
-                    fav[0] = true;
-                    addFavourites.setImageResource(R.drawable.ic_favorite);
-                    Toast.makeText(getContext(),itemm.getItemName()+" added to favourites", Toast.LENGTH_SHORT).show();
-                }else {
-                    fav[0] = false;
-                    addFavourites.setImageResource(R.drawable.ic_baseline_favorite_red);
-                    Toast.makeText(getContext(),itemm.getItemName()+" removed from favourites", Toast.LENGTH_SHORT).show();
-                }
+                favouritesDatabase db = favouritesDatabase.getDb(getContext());
+                itemDao dao = db.Item();
 
+                new Thread(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        favouriteItem it = dao.checkItem(itemm.getOwnerId() + itemm.getItemName());
+                        if (it == null) {
+
+                            favouriteItem itt = new favouriteItem();
+                             itt.setItemID(itemm.getOwnerId() + itemm.getItemName());
+
+                            String ownerid = user.getUid();
+                            itt.setOwnerId(ownerid);
+
+                            String jsonObject = Utility.getGsonParser().toJson(itemm);
+                            itt.setJonObject(jsonObject);
+                            dao.itemInsert(itt);
+
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Toast.makeText(getContext(),"Item : "+itemm.getItemName()+" added to favourites",Toast.LENGTH_LONG).show();
+                                }
+                            });
+                            } else {
+                            dao.ItemDelete(it);
+                                getActivity().runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Toast.makeText(getContext(),"Item : "+itemm.getItemName()+" has been removed from favourites",Toast.LENGTH_LONG).show();
+                                    }
+                                });
+                        }
+                    }
+                }).start();
             }
         });
 

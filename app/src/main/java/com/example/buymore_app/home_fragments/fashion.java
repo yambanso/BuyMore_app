@@ -45,6 +45,8 @@ public class fashion extends Fragment {
     private String mParam1;
     private String mParam2;
     RecyclerView recyclerView;
+    DatabaseReference db;
+    private  ValueEventListener valueEventListener;
 
     public fashion() {
         // Required empty public constructor
@@ -88,9 +90,9 @@ public class fashion extends Fragment {
             String desc = getResources().getString(R.string.description);
         ArrayList<Items> fashionItems = new ArrayList<>();
         ItemsAdapter adapter = new ItemsAdapter(fashionItems, getContext());
-        DatabaseReference db = FirebaseDatabase.getInstance().getReference("Item");
+        db = FirebaseDatabase.getInstance().getReference("Item");
         recyclerView.setAdapter(adapter);
-        db.addValueEventListener(new ValueEventListener() {
+        valueEventListener = db.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
                 for(DataSnapshot dataSnapshot : snapshot.getChildren()){
@@ -107,5 +109,11 @@ public class fashion extends Fragment {
             }
         });
         return view;
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        db.removeEventListener(valueEventListener);
     }
 }

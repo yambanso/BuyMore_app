@@ -106,6 +106,7 @@ public class add_item extends Fragment {
                              Bundle savedInstanceState) {
 
         // Inflate the layout for this fragment
+
         View  view = inflater.inflate(R.layout.fragment_add_item, container, false);
         imageup = view.findViewById(R.id.itemPicture);
         category = view.findViewById(R.id.category);
@@ -184,6 +185,7 @@ public class add_item extends Fragment {
     }
 
     private void uploadItem(Uri uri, String ownerID,int qty, String name, String catego,int price, String descript) {
+
             StorageReference fileref =  storageReference.child(System.currentTimeMillis()+"."+getFileExtension(uri));
             fileref.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
@@ -194,10 +196,9 @@ public class add_item extends Fragment {
 
                                 Items item = new Items(ownerID,uri.toString(),qty,name, catego, price,descript);
                                 String itemID  = dbRef.push().getKey();
-                                System.out.println(itemID);
                                 dbRef.child(itemID).setValue(item);
 
-                                Toast.makeText(getContext(),"Item upload succesiful",Toast.LENGTH_LONG).show();
+                                Toast.makeText(getContext(),"Item upload succesiful "+ itemID,Toast.LENGTH_LONG).show();
                                 prg.setVisibility(View.INVISIBLE);
                                                             }
                         });

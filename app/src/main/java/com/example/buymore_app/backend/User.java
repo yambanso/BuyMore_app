@@ -10,7 +10,6 @@ public class User {
         this. email = email;
         this.phone = phone;
         this.address = address;
-        this.password = password;
     }
 
 }

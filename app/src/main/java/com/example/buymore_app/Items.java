@@ -27,8 +27,8 @@ public class Items {
         this.description = description;
     }
 
-    public Uri getUri() {
-        return Uri.parse(uri);
+    public String getUri() {
+        return uri;
     }
 
     public void setUri(String uri) {

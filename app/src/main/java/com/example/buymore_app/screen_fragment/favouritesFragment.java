@@ -5,14 +5,25 @@ import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.room.Room;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.buymore_app.Adapter.ItemsAdapter;
+import com.example.buymore_app.Adapter.Utility;
 import com.example.buymore_app.Items;
 import com.example.buymore_app.R;
+import com.example.buymore_app.backend.favouriteItem;
+import com.example.buymore_app.backend.favouritesDatabase;
+import com.example.buymore_app.backend.itemDao;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.example.buymore_app.R.drawable.huawei_mate_20;
 import static com.example.buymore_app.R.drawable.lg_v60;
@@ -65,7 +76,7 @@ public class favouritesFragment extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
-
+    List<favouriteItem> favlist = new ArrayList<>();
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -74,8 +85,38 @@ public class favouritesFragment extends Fragment {
         recyclerView =view.findViewById(R.id.recycleView);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        String desc = getResources().getString(R.string.description);
 
-        //recyclerView.setAdapter(new ItemsAdapter(ItemsList, getContext()));
-        return view;}
+        ArrayList<Items> list = new ArrayList<>();
+
+        favouritesDatabase db = favouritesDatabase.getDb(getContext());
+        itemDao dao = db.Item();
+
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        String uID = user.getUid();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                favlist = dao.getFavourites(uID);
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(getContext(),"you have " +favlist.size()+ " items in favourites", Toast.LENGTH_LONG).show();
+                    }
+                });
+
+                for(int i = 0; i < favlist.size();i++){
+                    favouriteItem itemm = favlist.get(i);
+                    String GsonObject = itemm.getJonObject();
+                    Items it = Utility.getGsonParser().fromJson(GsonObject,Items.class);
+                    list.add(it);
+                    System.out.println("added : "+it.getItemName()+" to list");
+                }
+            }
+
+        }).start();
+
+        ItemsAdapter adapter = new ItemsAdapter(list, getContext());
+        recyclerView.setAdapter(adapter);
+        return view;
+    }
 }

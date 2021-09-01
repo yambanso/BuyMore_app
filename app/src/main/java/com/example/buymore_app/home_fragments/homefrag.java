@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.buymore_app.Adapter.ItemsAdapter;
 import com.example.buymore_app.Items;
@@ -43,6 +44,7 @@ public class homefrag extends Fragment {
     }
 
         DatabaseReference db;
+        private  ValueEventListener valueEventListener;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,7 +63,7 @@ public class homefrag extends Fragment {
         ArrayList<Items> list = new ArrayList<>();
         ItemsAdapter adapter = new ItemsAdapter(list, getContext());
         recyclerView.setAdapter(adapter);
-        db.addValueEventListener(new ValueEventListener() {
+         valueEventListener = db.addValueEventListener(new ValueEventListener() {
 
             @Override
             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
@@ -84,4 +86,6 @@ public class homefrag extends Fragment {
 
 
     }
+
+
 }

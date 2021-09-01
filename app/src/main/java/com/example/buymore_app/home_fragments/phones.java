@@ -44,6 +44,8 @@ public class phones extends Fragment {
     private String mParam1;
     private String mParam2;
     RecyclerView recyclerView;
+    DatabaseReference db;
+    private ValueEventListener valueEventListener;
 
     public phones() {
         // Required empty public constructor
@@ -85,13 +87,13 @@ public class phones extends Fragment {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        DatabaseReference db = FirebaseDatabase.getInstance().getReference("Item");
+        db = FirebaseDatabase.getInstance().getReference("Item");
         ArrayList<Items> ItemsList = new ArrayList<>();
         ItemsAdapter adapter = new ItemsAdapter(ItemsList, getContext());
 
         recyclerView.setAdapter(adapter);
 
-        db.addValueEventListener(new ValueEventListener() {
+        valueEventListener = db.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
                 for(DataSnapshot dataSnapshot : snapshot.getChildren()){
@@ -107,5 +109,12 @@ public class phones extends Fragment {
 
             }
         });
-        return view;}
+        return view;
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        db.removeEventListener(valueEventListener);
+    }
 }

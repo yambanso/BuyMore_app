@@ -73,6 +73,7 @@ public class laptops extends Fragment {
         }
     }
     DatabaseReference db;
+    private  ValueEventListener valueEventListener;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -84,7 +85,7 @@ public class laptops extends Fragment {
         db = FirebaseDatabase.getInstance().getReference("Item");
         ArrayList<Items> list = new ArrayList<>();
         ItemsAdapter adapter = new ItemsAdapter(list, getContext());
-        db.addValueEventListener(new ValueEventListener() {
+        valueEventListener = db.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
                 for(DataSnapshot dataSnapshot : snapshot.getChildren()){
@@ -103,5 +104,13 @@ public class laptops extends Fragment {
             }
         });
         recyclerView.setAdapter(adapter);
-        return view;}
+
+        return view;
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        db.removeEventListener(valueEventListener);
+    }
 }

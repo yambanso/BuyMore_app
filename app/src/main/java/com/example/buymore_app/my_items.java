@@ -81,6 +81,8 @@ public class my_items extends Fragment {
     }
     RecyclerView recyclerView;
     String id;
+    DatabaseReference db;
+    private ValueEventListener valueEventListener;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -92,7 +94,7 @@ public class my_items extends Fragment {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         ArrayList<Items> ItemsList = new ArrayList<>();
-        DatabaseReference db = FirebaseDatabase.getInstance().getReference("Item");
+        db = FirebaseDatabase.getInstance().getReference("Item");
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         id = user.getUid();
@@ -100,7 +102,7 @@ public class my_items extends Fragment {
         ItemsAdapter  adapter = new ItemsAdapter(ItemsList, getContext());
         recyclerView.setAdapter(adapter);
 
-        db.addValueEventListener(new ValueEventListener() {
+        valueEventListener = db.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
                 for(DataSnapshot dataSnapshot : snapshot.getChildren()){
@@ -116,6 +118,13 @@ public class my_items extends Fragment {
 
             }
         });
+
         return view;
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        db.removeEventListener(valueEventListener);
     }
 }
