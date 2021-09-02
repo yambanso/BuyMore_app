@@ -8,6 +8,7 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -25,10 +26,16 @@ import com.example.buymore_app.R;
 import com.example.buymore_app.backend.favouriteItem;
 import com.example.buymore_app.backend.favouritesDatabase;
 import com.example.buymore_app.backend.itemDao;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.squareup.picasso.Picasso;
 
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.TestOnly;
 
 import java.io.UnsupportedEncodingException;
@@ -49,6 +56,7 @@ public class item_Details extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    private String contact;
 
     public item_Details() {
         // Required empty public constructor
@@ -126,18 +134,43 @@ public class item_Details extends Fragment {
         enq.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String contact = "265999127521";
-                String message = "I would like to enquire about item : " +itemm.getItemName()+" listed on the buy more app for sale";
-                Intent intent = new Intent(Intent.ACTION_SEND);
-                intent.setType("text/plain");
-                intent.putExtra(Intent.EXTRA_TEXT,message);
-                intent.putExtra("jid",contact + "@s.whatsapp.net");
-                intent.setPackage("com.whatsapp");
-                if(intent.resolveActivity(getActivity().getPackageManager()) == null){
-                    Toast.makeText(getContext(),"Failled to send enquiry message", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                startActivity(intent);
+                DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
+                ref.child("Users").child(itemm.getOwnerId()).child("phone").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull @NotNull Task<DataSnapshot> task) {
+                        if(task.isSuccessful()){
+                            contact = (String) task.getResult().getValue();
+                            contact = contact.replaceFirst("0","265");
+
+                            String message = "I would like to enquire about item : " +itemm.getItemName()+" listed on the buy more app for sale";
+                            Intent intent = new Intent(Intent.ACTION_SEND);
+                            intent.setType("text/plain");
+                            intent.putExtra(Intent.EXTRA_TEXT,message);
+                            intent.putExtra("jid", contact + "@s.whatsapp.net");
+                            intent.setPackage("com.whatsapp");
+                            if(intent.resolveActivity(getActivity().getPackageManager()) == null){
+                                getActivity().runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Toast.makeText(getContext(),"Failled to send enquiry message", Toast.LENGTH_SHORT).show();
+                                        return;
+                                    }
+                                });
+
+                            }
+                            startActivity(intent);
+
+                        }else{    getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(getContext(),"Failled to send enquiry message", Toast.LENGTH_SHORT).show();
+                                return;
+                            }
+                        });
+
+                        }
+                    }
+                });
 
             }
         });
