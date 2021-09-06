@@ -13,6 +13,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.buymore_app.Items;
 import com.example.buymore_app.R;
+import com.example.buymore_app.backend.favouritesDatabase;
+import com.example.buymore_app.backend.itemOrderEntity;
+import com.example.buymore_app.backend.orderItemDao;
+import com.squareup.picasso.Picasso;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -21,10 +25,12 @@ import java.util.List;
 public class cartAdapter extends RecyclerView.Adapter<cartAdapter.cartViewHolder>{
         List<Items> item;
         Context context;
+        TextView price;
 
-    public cartAdapter(List<Items> item, Context context) {
+    public cartAdapter(List<Items> item, Context context,TextView price) {
         this.item = item;
         this.context = context;
+        this.price = price;
     }
 
     @NonNull
@@ -38,9 +44,9 @@ public class cartAdapter extends RecyclerView.Adapter<cartAdapter.cartViewHolder
     @Override
     public void onBindViewHolder(@NonNull @NotNull cartViewHolder holder, int position) {
         Items itemm = item.get(position);
-        holder.price.setText(itemm.getPrice());
+        holder.price.setText("Price is : "+itemm.getPrice());
         holder.itemname.setText(itemm.getItemName());
-        holder.itemImage.setImageResource(itemm.getImageUrl());
+        Picasso.get().load(itemm.getUri()).into(holder.itemImage);
 
     }
 
@@ -55,6 +61,7 @@ public class cartAdapter extends RecyclerView.Adapter<cartAdapter.cartViewHolder
 
         public cartViewHolder(@NonNull @NotNull View itemView) {
             super(itemView);
+
             itemImage = itemView.findViewById(R.id.itemImage);
             removeItem = itemView.findViewById(R.id.remove_in_cart);
             itemname = itemView.findViewById(R.id.itemName);
@@ -63,11 +70,28 @@ public class cartAdapter extends RecyclerView.Adapter<cartAdapter.cartViewHolder
             removeItem.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(context,"Item : "+item.get(getAdapterPosition()).getItemName()+" removed from cart", Toast.LENGTH_SHORT).show();
+                    Items itemm = item.get(getAdapterPosition());
+                    favouritesDatabase db = favouritesDatabase.getDb(v.getContext());
+                    orderItemDao dao = db.order();
+                    int total = 0;
+                    for(int i =0; i < item.size(); i++) total += item.get(i).getPrice();
+                    total = total - item.get(getAdapterPosition()).getPrice();
+                    price.setText("Total : k "+ total);
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+
+                            itemOrderEntity  et = dao.checkInCart(itemm.getOwnerId()+itemm.getItemName());
+                            dao.itemDelete(et);
+
+                                                    }
+                    }).start();
+
+                    Toast.makeText(context,"Item : "+itemm.getItemName()+" removed from cart", Toast.LENGTH_SHORT).show();
+
                     item.remove(getAdapterPosition());
                     notifyItemRemoved(getAdapterPosition());
                     notifyItemRangeChanged(getAdapterPosition(),item.size());
-
                 }
             });
 

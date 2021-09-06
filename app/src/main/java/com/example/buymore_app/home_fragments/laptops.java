@@ -108,9 +108,5 @@ public class laptops extends Fragment {
         return view;
     }
 
-    @Override
-    public void onPause() {
-        super.onPause();
-        db.removeEventListener(valueEventListener);
-    }
+
 }

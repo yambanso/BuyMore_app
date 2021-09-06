@@ -26,6 +26,8 @@ import com.example.buymore_app.R;
 import com.example.buymore_app.backend.favouriteItem;
 import com.example.buymore_app.backend.favouritesDatabase;
 import com.example.buymore_app.backend.itemDao;
+import com.example.buymore_app.backend.itemOrderEntity;
+import com.example.buymore_app.backend.orderItemDao;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -127,7 +129,73 @@ public class item_Details extends Fragment {
         add_Cart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getContext(),itemm.getItemName()+" Added to cart succesifuly", Toast.LENGTH_SHORT).show();
+                favouritesDatabase db = favouritesDatabase.getDb(getContext());
+                orderItemDao dao = db.order();
+
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        itemOrderEntity et = dao.checkInCart(itemm.getOwnerId()+itemm.getItemName());
+                        if(et == null){
+                            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                            String uID = user.getUid();
+
+
+                            itemOrderEntity it = new itemOrderEntity();
+
+                            it.setItemID(itemm.getOwnerId()+itemm.getItemName());
+                            it.setOrderOwner(uID);
+                            it.setItemPrice(itemm.getPrice());
+                            it.setItemName(itemm.getItemName());
+                            it.setItemOwner(itemm.getOwnerId());
+
+                            DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
+                            ref.child("Users").child(uID).child("phone").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull @NotNull Task<DataSnapshot> task) {
+                                    if(task.isSuccessful()){
+                                        String ownerContact;
+                                        ownerContact = (String) task.getResult().getValue();
+                                        it.setOrderOwnerContact(ownerContact);
+                                        new Thread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                dao.  orderItemInsert(it);
+                                                getActivity().runOnUiThread(new Runnable() {
+                                                    @Override
+                                                    public void run() {
+                                                        Toast.makeText(getContext(),"Item : "+itemm.getItemName()+"added to cart sucessifully",Toast.LENGTH_LONG).show();
+                                                    }
+                                                });
+                                            }
+                                        }).start();
+
+                                    }else{
+                                        getActivity().runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                Toast.makeText(getContext(),"Failled to add item to cart",Toast.LENGTH_LONG).show();
+                                            }
+                                        });
+                                    }
+                                }
+                            });
+                        }else{
+                            new Thread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    dao.itemDelete(et);
+                                    getActivity().runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            Toast.makeText(getContext(),"Item : "+et.getItemName()+"removed from cart",Toast.LENGTH_LONG).show();
+                                        }
+                                    });
+                                }
+                            }).start();
+                        }
+                    }
+                }).start();
             }
         });
 

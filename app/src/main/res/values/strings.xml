@@ -42,6 +42,7 @@
     <string name="reset_password">Reset Password</string>
     <string name="reset_pas">Reset password</string>
     <string name="cancel">Cancel</string>
+    <string name="item_x_">Item x has been order by sososososo</string>
     <string-array name="category_array">
         <item>Laptop</item>
         <item>Fashion</item>

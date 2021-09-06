@@ -100,7 +100,7 @@ public class favouritesFragment extends Fragment {
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Toast.makeText(getContext(),"you have " +favlist.size()+ " items in favourites", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getContext(),"Rtreiving item please wait patiently", Toast.LENGTH_LONG).show();
                     }
                 });
 
@@ -109,7 +109,7 @@ public class favouritesFragment extends Fragment {
                     String GsonObject = itemm.getJonObject();
                     Items it = Utility.getGsonParser().fromJson(GsonObject,Items.class);
                     list.add(it);
-                    System.out.println("added : "+it.getItemName()+" to list");
+
                 }
             }
 

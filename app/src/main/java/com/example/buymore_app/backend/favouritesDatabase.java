@@ -6,7 +6,7 @@ import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
-@Database(entities = {favouriteItem.class}, version = 1)
+@Database(entities = {favouriteItem.class,itemOrderEntity.class}, version = 2)
 public abstract class favouritesDatabase extends RoomDatabase {
 
 
@@ -22,4 +22,5 @@ public abstract class favouritesDatabase extends RoomDatabase {
             return db;
         }
     public abstract itemDao Item();
+    public abstract orderItemDao order();
 }
